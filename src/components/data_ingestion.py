@@ -7,6 +7,7 @@ from src.exception import CustomException
 from src.logger import logging
 from src.components.data_transformation import DataTransformation
 from src.components.data_transformation import DataTransformation, DataTransformationConfig
+from src.components.model_trainer import ModelTrainerConfig, ModelTrainer
 
 
 
@@ -52,15 +53,15 @@ class DataIngestion:
 
 
 if __name__ == '__main__':
-    obj = DataIngestion()
-    train_data, test_data = obj.initiate_data_ingestion()
+    ingestion = DataIngestion()
+    train_path, test_path = ingestion.initiate_data_ingestion()
 
-    data_transformation = DataTransformation()
-    train_arr, test_arr, preprocessor_path = data_transformation.initiate_data_transformation(
-        train_data, test_data
-    )
+    transformation = DataTransformation()
+    train_arr, test_arr, preprocessor_path = transformation.initiate_data_transformation(train_path, test_path)
 
-    print("✅ Data Transformation Completed")
-    print("Train array shape:", train_arr.shape)
-    print("Test array shape:", test_arr.shape)
-    print("Preprocessor saved at:", preprocessor_path)
+    trainer = ModelTrainer()
+    best_model_name, r2 = trainer.initiate_model_trainer(train_arr, test_arr)
+
+    print(f" Best Model: {best_model_name}")
+    print(f" R2 Score on Test Set: {r2}")
+    
